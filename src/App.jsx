@@ -9,6 +9,8 @@ let [result, setResult] = useState('');
 let [error, setError] = useState('');
 
 const getNum = (e)=>{
+  setError('');
+  setResult('');
     if(e.target.name === 'num1'){
         setNum1(e.target.value);
     }
@@ -20,12 +22,15 @@ const getNum = (e)=>{
 const validateInputs = () => {
     if (Num1 === '' || Num2 === '') {
       setError('Both fields are required.');
+      setResult('');
       return false;
     }
     if (isNaN(Num1) || isNaN(Num2)) {
       setError('Inputs must be valid numbers.');
+      setResult('');
       return false;
     }
+    setError('');
     setError('');
     return true;
   }
@@ -34,8 +39,8 @@ const validateInputs = () => {
 const getValue = (operation)=>{
     if(!validateInputs()) return;
     // operation.preventDefault();
-    let n1 = parseInt(Num1);
-    let n2 = parseInt(Num2);
+    let n1 = parseFloat(Num1);
+    let n2 = parseFloat(Num2);
     let ans;
 
     switch (operation) {
@@ -54,29 +59,31 @@ const getValue = (operation)=>{
         default:
           return;
       }
-      setResult(`Result - ${ans}`);
+      setResult(`Result : ${ans}`);
   
 }
 
     return (
         <div className='box'>
-            <div className='calculator-space'>
+          <div className='calculator-space'>
             <h1>React calculator</h1>
             <form action="">
-                <input type="text" name='num1'  placeholder='Num1' onChange={getNum}/>
-                <br /><br />
-                <input type="text" name='num2'  placeholder='Num2' onChange={getNum}/>
-                <br /><br />
-                <button type='button'onClick={() => getValue('add')}>+</button>
-                <button type='button'onClick={() => getValue('subtract')}>-</button>
-                <button type='button'onClick={() => getValue('multiply')}>x</button>
-                <button type='button'onClick={() => getValue('divide')}>/</button>
+              <div className='input'>
+              <input type="text" name='num1'  placeholder='Num1' onChange={getNum}/>
+              <input type="text" name='num2'  placeholder='Num2' onChange={getNum}/>
+              </div>
+              <div className='buttons'>
+              <button type='button'onClick={() => getValue('add')}>+</button>
+              <button type='button'onClick={() => getValue('subtract')}>-</button>
+              <button type='button'onClick={() => getValue('multiply')}>x</button>
+              <button type='button'onClick={() => getValue('divide')}>/</button>
+              </div>
             </form>
-            {error && <div className="error">{error}</div>}
-              {result && <div className="result">{result}</div>}
-            </div>
-         </div>
-    )
+            {error && <div><h3 className="error">Error</h3><p>{error}</p></div>}
+            {result && <div><h3 className='result'>Success!</h3><p>{result}</p></div>}
+        </div>
+        </div>
+      )
 }
 
 export default App;
